@@ -1,0 +1,15 @@
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+    - lib/**/*.rake
+    - app/**/*.rb
+  Exclude:
+    - bin/**/*
+    - db/schema.rb
+
+Metrics/LineLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
