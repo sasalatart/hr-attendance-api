@@ -13,6 +13,7 @@ AllCops:
     - bin/**/*
     - db/schema.rb
     - vendor/bundle/**/*
+    - Gemfile
 
 Metrics/LineLength:
   Enabled: false
