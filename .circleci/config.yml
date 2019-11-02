@@ -8,14 +8,12 @@ version: 2.1
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: *ruby-docker-image
         environment:
           BUNDLER_VERSION: 2.0.1
           RAILS_ENV: test
           PGHOST: 127.0.0.1
           PGUSER: postgres
-
       - image: *postgres-docker-image
 
     working_directory: *working-directory
