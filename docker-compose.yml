@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:12.0
+    environment:
+      - POSTGRES_PASSWORD
+    volumes:
+      - postgresql:/var/lib/postgresql
+    restart: always
+
+  api:
+    image: index.docker.io/sasalatart/hr-attendance-api
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    restart: always
+
+  proxy:
+    container_name: proxy
+    image: abiosoft/caddy
+    environment:
+      ACME_AGREE: "true"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "$HOME/Caddyfile:/etc/Caddyfile"
+      - "$HOME/.caddy:/root/.caddy"
+    restart: always
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "$HOME/.docker/config.json:/config.json"
+    restart: always
+
+volumes:
+  postgresql:

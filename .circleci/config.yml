@@ -5,8 +5,9 @@ working-directory: &working-directory ~/repo
 
 version: 2.1
 
-jobs:
-  build:
+executors:
+  ruby_executor:
+    working_directory: *working-directory
     docker:
       - image: *ruby-docker-image
         environment:
@@ -16,7 +17,9 @@ jobs:
           PGUSER: postgres
       - image: *postgres-docker-image
 
-    working_directory: *working-directory
+jobs:
+  lint_and_test:
+    executor: ruby_executor
 
     steps:
       - checkout
@@ -65,3 +68,25 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+  build_and_push_docker_image:
+    executor: ruby_executor
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - deploy:
+          command: docker build . -t $DOCKER_IMAGE && docker push $DOCKER_IMAGE
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - lint_and_test
+      - build_and_push_docker_image:
+          requires:
+            - lint_and_test
+          filters:
+            branches:
+              only: master
