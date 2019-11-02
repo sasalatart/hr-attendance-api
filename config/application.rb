@@ -37,5 +37,8 @@ module HrAttendanceApi
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    config.i18n.available_locales = %i[es en]
+    config.i18n.default_locale = :es
   end
 end
