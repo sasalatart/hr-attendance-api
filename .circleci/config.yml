@@ -1,0 +1,81 @@
+ruby-cache-key: &ruby-cache-key v1-dependencies-{{ checksum "Gemfile.lock" }}
+ruby-docker-image: &ruby-docker-image circleci/ruby:2.6.3
+working-directory: &working-directory ~/repo
+
+version: 2.1
+
+executors:
+  ruby_executor:
+    working_directory: *working-directory
+    docker:
+      - image: *ruby-docker-image
+        environment:
+          RAILS_ENV: test
+
+commands:
+  ruby_bootstrap:
+    description: Checkout code and restore ruby cache
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *ruby-cache-key
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+jobs:
+  bootstrap:
+    description: Install Gems
+    executor: ruby_executor
+    steps:
+      - ruby_bootstrap
+      - run: bundle install --jobs=4 --retry=3 --path vendor/bundle
+      - save_cache:
+          key: *ruby-cache-key
+          paths:
+            - ./vendor/bundle
+
+  lint:
+    description: Run RuboCop
+    executor: ruby_executor
+    steps:
+      - ruby_bootstrap
+      - run: rubocop
+
+  test:
+    description: Run Tests
+    executor: ruby_executor
+    steps:
+      - ruby_bootstrap
+      # Database setup
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+      - run: |
+          mkdir /tmp/test-results
+          TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+            circleci tests split --split-by=timings)"
+
+          bundle exec rspec \
+            --format progress \
+            --format RspecJunitFormatter \
+            --out /tmp/test-results/rspec.xml \
+            --format progress \
+            $TEST_FILES
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - bootstrap
+      - lint:
+          requires:
+            - bootstrap
+      - test:
+          requires:
+            - bootstrap
