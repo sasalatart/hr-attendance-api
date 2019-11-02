@@ -87,6 +87,6 @@ workflows:
       - build_and_push_docker_image:
           requires:
             - lint_and_test
-          # filters:
-          #   branches:
-          #     only: master
+          filters:
+            branches:
+              only: master
