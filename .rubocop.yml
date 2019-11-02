@@ -4,6 +4,7 @@ AllCops:
     - config.ru
     - lib/**/*.rake
     - app/**/*.rb
+    - spec/**/*.rb
   Exclude:
     - bin/**/*
     - db/schema.rb
