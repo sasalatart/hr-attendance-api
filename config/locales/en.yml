@@ -1,4 +1,5 @@
 en:
   errors:
+    forbidden: "Forbidden"
     not_found: "Not found"
     token_expired: "Your session has expired"

@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::API
   include ExceptionHandler
   include Knock::Authenticable
+  include CanCan::ControllerAdditions
 
   before_action :set_locale
 

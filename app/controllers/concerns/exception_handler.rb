@@ -4,6 +4,10 @@ module ExceptionHandler
   extend ActiveSupport::Concern
 
   included do
+    rescue_from CanCan::AccessDenied do
+      render json: i18n_error(:forbidden), status: :forbidden
+    end
+
     rescue_from ActiveRecord::RecordNotFound do
       render json: i18n_error('errors.not_found'), status: :not_found
     end

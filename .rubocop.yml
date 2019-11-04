@@ -15,8 +15,14 @@ AllCops:
     - vendor/bundle/**/*
     - Gemfile
 
-Metrics/LineLength:
+Style/Documentation:
   Enabled: false
 
-Style/Documentation:
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "**/*.rake"
+    - "spec/**/*.rb"
+
+Metrics/LineLength:
   Enabled: false

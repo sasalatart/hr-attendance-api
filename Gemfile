@@ -12,6 +12,8 @@ gem 'rails-i18n', '~> 5.1.3'
 gem 'jwt'
 gem 'knock'
 gem 'bcrypt', '~> 3.1.7'
+gem 'cancancan'
+gem 'rolify'
 
 gem 'active_model_serializers'
 
