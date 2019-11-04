@@ -205,6 +205,7 @@ DEPENDENCIES
   bullet
   byebug
   factory_bot_rails
+  jwt
   knock
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
