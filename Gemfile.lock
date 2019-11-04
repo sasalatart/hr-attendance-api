@@ -50,6 +50,7 @@ GEM
     annotate (2.6.5)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
+    api-pagination (4.8.2)
     arel (9.0.0)
     ast (2.4.0)
     bcrypt (3.1.13)
@@ -80,6 +81,18 @@ GEM
     jaro_winkler (1.5.4)
     jsonapi-renderer (0.2.2)
     jwt (1.5.6)
+    kaminari (1.1.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.1.1)
+      kaminari-activerecord (= 1.1.1)
+      kaminari-core (= 1.1.1)
+    kaminari-actionview (1.1.1)
+      actionview
+      kaminari-core (= 1.1.1)
+    kaminari-activerecord (1.1.1)
+      activerecord
+      kaminari-core (= 1.1.1)
+    kaminari-core (1.1.1)
     knock (2.1.1)
       bcrypt (~> 3.1)
       jwt (~> 1.5)
@@ -203,6 +216,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   annotate
+  api-pagination
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
   bullet
@@ -210,6 +224,7 @@ DEPENDENCIES
   cancancan
   factory_bot_rails
   jwt
+  kaminari
   knock
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
