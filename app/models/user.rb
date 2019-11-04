@@ -14,9 +14,11 @@
 EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i.freeze
 
 class User < ApplicationRecord
+  rolify
   has_secure_password
 
   before_save :downcase_email
+  after_create :assign_default_role
 
   validates :email, presence: true,
                     uniqueness: { allow_blank: true, case_sensitive: false },
@@ -26,5 +28,9 @@ class User < ApplicationRecord
 
   def downcase_email
     self.email = email.downcase if will_save_change_to_attribute?(:email)
+  end
+
+  def assign_default_role
+    add_role(:employee) if roles.blank?
   end
 end

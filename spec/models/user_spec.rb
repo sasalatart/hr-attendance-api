@@ -40,4 +40,12 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'roles' do
+    subject { create(:user) }
+
+    it 'should default to employee' do
+      expect(subject.has_role?(:employee)).to be true
+    end
+  end
 end
