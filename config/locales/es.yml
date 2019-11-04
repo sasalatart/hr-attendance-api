@@ -1,2 +1,4 @@
 es:
-  hello: "Hola mundo"
+  errors:
+    not_found: "No encontrado"
+    token_expired: "Tu sesión ha expirado"

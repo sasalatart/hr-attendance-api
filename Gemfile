@@ -9,8 +9,8 @@ gem 'rails', '~> 5.2.0'
 
 gem 'rails-i18n', '~> 5.1.3'
 
+gem 'jwt'
 gem 'knock'
-# Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'active_model_serializers'
