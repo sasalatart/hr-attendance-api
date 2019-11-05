@@ -1,0 +1,5 @@
+# frozen_string_literal: true
+
+class OrganizationSerializer < ActiveModel::Serializer
+  attributes :id, :name, :updated_at, :created_at
+end

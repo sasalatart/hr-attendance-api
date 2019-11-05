@@ -9,20 +9,30 @@
 #  password_digest :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  role            :integer          not null
+#  organization_id :uuid
 #
 
 EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i.freeze
 
 class User < ApplicationRecord
-  rolify
+  ROLES = { admin: 0, org_admin: 1, employee: 2 }.freeze
+
   has_secure_password
 
+  enum role: ROLES
+
   before_save :downcase_email
-  after_create :assign_default_role
+
+  belongs_to :organization, optional: true
+
+  validates :role, presence: true
 
   validates :email, presence: true,
                     uniqueness: { allow_blank: true, case_sensitive: false },
                     format: { allow_blank: true, with: EMAIL_REGEX }
+
+  validate :organization_present_for_non_admins_only
 
   private
 
@@ -30,7 +40,9 @@ class User < ApplicationRecord
     self.email = email.downcase if will_save_change_to_attribute?(:email)
   end
 
-  def assign_default_role
-    add_role(:employee) if roles.blank?
+  def organization_present_for_non_admins_only
+    return if (admin? && !organization_id) || (!admin? && organization_id)
+
+    errors.add(:organization_id, :organization_consistency)
   end
 end
