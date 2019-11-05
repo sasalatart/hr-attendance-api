@@ -11,6 +11,9 @@
 #  updated_at      :datetime         not null
 #  role            :integer          not null
 #  organization_id :uuid
+#  name            :string           not null
+#  surname         :string           not null
+#  second_surname  :string
 #
 
 EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i.freeze
@@ -31,6 +34,9 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: { allow_blank: true, case_sensitive: false },
                     format: { allow_blank: true, with: EMAIL_REGEX }
+
+  validates :name, presence: true
+  validates :surname, presence: true
 
   validate :organization_present_for_non_admins_only
 

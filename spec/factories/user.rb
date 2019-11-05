@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  sequence(:email) { |n| "email-#{n}@example.com" }
-
   factory :user do
-    email { generate(:email) }
+    email
+    name
+    surname { 'Surname' }
     password { 'test-password' }
 
     factory :admin do
