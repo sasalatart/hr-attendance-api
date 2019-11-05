@@ -2,31 +2,26 @@
 
 RSpec.describe 'Users requests' do
   describe 'GET /users/me' do
-    URL = '/users/me'
+    url = '/users/me'
 
     context 'when the user is not authenticated' do
       it 'responds with an unauthorized status' do
-        get URL
+        get url
         expect(response).to have_http_status(:unauthorized)
       end
     end
 
     context 'when the user is authenticated' do
-      let(:user) { create(:user) }
+      let(:user) { create(:admin) }
 
-      before { get URL, headers: authenticated_header(user) }
+      before { get url, headers: authenticated_header(user) }
 
       it 'responds with an ok status' do
         expect(response).to have_http_status(:ok)
       end
 
       it 'responds with the serialized requesting user' do
-        expect(response.body).to eql(
-          { id: user.id,
-            email: user.email,
-            updated_at: user.updated_at,
-            created_at: user.created_at }.to_json
-        )
+        expect(response.body).to eql(UserSerializer.new(user).to_json)
       end
     end
   end

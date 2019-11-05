@@ -13,7 +13,6 @@ gem 'jwt'
 gem 'knock'
 gem 'bcrypt', '~> 3.1.7'
 gem 'cancancan'
-gem 'rolify'
 
 gem 'kaminari'
 gem 'api-pagination'

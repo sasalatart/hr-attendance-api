@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-User.create!(email: 'user@example.org', password: 'napoleon')
+User.create!(role: :admin, email: 'admin@example.org', password: 'napoleon')
