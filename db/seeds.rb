@@ -5,18 +5,17 @@ total_organizations = 35
 org_admins_per_organization = 5
 employees_per_organization = 35
 
-used_names = []
-
 User.create!(role: :admin,
              email: 'admin@example.org',
              password: default_password)
 
+used_company_names = []
 total_organizations.times do |org_idx|
   puts "Creating organization #{org_idx + 1}/#{total_organizations}"
 
   name = Faker::Company.name
-  name = Faker::Company.name while used_names.include?(name)
-  used_names << name
+  name = Faker::Company.name while used_company_names.include?(name)
+  used_company_names << name
 
   organization = Organization.create!(name: name)
 
