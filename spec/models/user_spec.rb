@@ -11,6 +11,9 @@
 #  updated_at      :datetime         not null
 #  role            :integer          not null
 #  organization_id :uuid
+#  name            :string           not null
+#  surname         :string           not null
+#  second_surname  :string
 #
 
 require 'rails_helper'
@@ -51,11 +54,6 @@ RSpec.describe User, type: :model do
       end
     end
 
-    describe 'password' do
-      it { should have_secure_password }
-      it { should validate_confirmation_of(:password) }
-    end
-
     describe 'email' do
       subject { create(:admin) }
 
@@ -63,6 +61,23 @@ RSpec.describe User, type: :model do
       it { should validate_uniqueness_of(:email).case_insensitive }
       it { should allow_values('user@example.org', 'user@example.cl').for(:email) }
       it { should_not allow_values('', 'user', 'user@', 'user@example', 'user@example.').for(:email) }
+    end
+
+    describe 'name' do
+      it { should validate_presence_of(:name) }
+    end
+
+    describe 'surname' do
+      it { should validate_presence_of(:surname) }
+    end
+
+    describe 'second_surname' do
+      it { should_not validate_presence_of(:second_surname) }
+    end
+
+    describe 'password' do
+      it { should have_secure_password }
+      it { should validate_confirmation_of(:password) }
     end
   end
 
