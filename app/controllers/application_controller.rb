@@ -12,4 +12,8 @@ class ApplicationController < ActionController::API
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end
+
+  def current_ability
+    @current_ability ||= Ability.new(current_user, params)
+  end
 end

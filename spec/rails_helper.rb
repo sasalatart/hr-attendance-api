@@ -4,6 +4,7 @@
 require 'spec_helper'
 require_relative './support/authentication'
 require_relative './support/factory_bot'
+require_relative './support/shared_examples'
 
 ENV['RAILS_ENV'] ||= 'test'
 

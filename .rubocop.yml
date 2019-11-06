@@ -26,3 +26,7 @@ Metrics/BlockLength:
 
 Metrics/LineLength:
   Enabled: false
+
+Metrics/MethodLength:
+  Exclude:
+    - "app/models/ability.rb"
