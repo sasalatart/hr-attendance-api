@@ -14,12 +14,12 @@ class OrganizationsController < ApplicationController
   end
 
   def create
-    @organization.save
+    @organization.save!
     render json: @organization, status: :created
   end
 
   def update
-    @organization.update(organization_params)
+    @organization.update!(organization_params)
     render json: @organization
   end
 

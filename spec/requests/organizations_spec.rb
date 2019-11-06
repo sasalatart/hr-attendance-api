@@ -9,7 +9,7 @@ RSpec.describe 'Organizations requests' do
       total.times { create(:organization) }
     end
 
-    context 'when the user is not authenticated' do
+    context 'when the request is not authenticated' do
       it 'responds with an unauthorized status' do
         get url
         expect(response).to have_http_status(:unauthorized)
@@ -56,7 +56,7 @@ RSpec.describe 'Organizations requests' do
     let(:organization) { create(:organization) }
     let(:url) { "/organizations/#{organization.id}" }
 
-    context 'when the user is not authenticated' do
+    context 'when the request is not authenticated' do
       it 'responds with an unauthorized status' do
         get url
         expect(response).to have_http_status(:unauthorized)
@@ -112,7 +112,7 @@ RSpec.describe 'Organizations requests' do
       post '/organizations', headers: headers, params: { name: 'created-org-name' }
     end
 
-    context 'when the user is not authenticated' do
+    context 'when the request is not authenticated' do
       it 'responds with an unauthorized status' do
         create_organization
         expect(response).to have_http_status(:unauthorized)
@@ -156,7 +156,7 @@ RSpec.describe 'Organizations requests' do
       put "/organizations/#{organization.id}", headers: headers, params: { name: name }
     end
 
-    context 'when the user is not authenticated' do
+    context 'when the request is not authenticated' do
       it 'responds with an unauthorized status' do
         update_organization('name-a')
         expect(response).to have_http_status(:unauthorized)
@@ -204,7 +204,7 @@ RSpec.describe 'Organizations requests' do
       delete "/organizations/#{organization.id}", headers: headers
     end
 
-    context 'when the user is not authenticated' do
+    context 'when the request is not authenticated' do
       it 'responds with an unauthorized status' do
         destroy_organization
         expect(response).to have_http_status(:unauthorized)
