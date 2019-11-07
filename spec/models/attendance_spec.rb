@@ -14,10 +14,10 @@
 
 require 'rails_helper'
 
-RSpec.describe Attendance, type: :model do
-  @bod = DateTime.now.beginning_of_day
-  @eod = DateTime.now.end_of_day
+bod = DateTime.now.beginning_of_day
+eod = DateTime.now.end_of_day
 
+RSpec.describe Attendance, type: :model do
   subject { build(:attendance) }
 
   describe 'associations' do
@@ -49,10 +49,10 @@ RSpec.describe Attendance, type: :model do
       it { should_not validate_presence_of(:left_at) }
 
       it 'must be after entered_at' do
-        subject.entered_at = @bod
-        subject.left_at = @bod - 1.hour
+        subject.entered_at = bod
+        subject.left_at = bod - 1.hour
         expect(subject).to_not be_valid
-        subject.left_at = @bod + 1.hour
+        subject.left_at = bod + 1.hour
         expect(subject).to be_valid
       end
     end
@@ -84,17 +84,17 @@ RSpec.describe Attendance, type: :model do
 
       [
         # same timestamps
-        [{ e_at: @bod, l_at: @eod }, { e_at: @bod, l_at: @eod }],
+        [{ e_at: bod, l_at: eod }, { e_at: bod, l_at: eod }],
         # same entered_at, different left_at, but within same day
-        [{ e_at: @bod, l_at: @eod }, { e_at: @bod, l_at: @eod - 1.hour }],
+        [{ e_at: bod, l_at: eod }, { e_at: bod, l_at: eod - 1.hour }],
         # same entered_at, different left_at in different days
-        [{ e_at: @bod, l_at: @eod }, { e_at: @bod, l_at: @eod + 1.hour }],
+        [{ e_at: bod, l_at: eod }, { e_at: bod, l_at: eod + 1.hour }],
         # different entered_at but in same day, different left_at in different days
-        [{ e_at: @bod, l_at: @eod }, { e_at: @bod, l_at: @eod + 1.hour }],
+        [{ e_at: bod, l_at: eod }, { e_at: bod, l_at: eod + 1.hour }],
         # same left_at, different entered_at, but within same day
-        [{ e_at: @bod + 1.hour, l_at: @eod }, { e_at: @bod, l_at: @eod }],
+        [{ e_at: bod + 1.hour, l_at: eod }, { e_at: bod, l_at: eod }],
         # same left_at, different entered_at in different days
-        [{ e_at: @bod - 1.hour, l_at: @eod }, { e_at: @bod, l_at: @eod }]
+        [{ e_at: bod - 1.hour, l_at: eod }, { e_at: bod, l_at: eod }]
       ].each do |stamps|
         it_behaves_like 'not able to have two registries in a same day', stamps
       end
