@@ -61,7 +61,10 @@ RSpec.describe User, type: :model do
       it { should validate_presence_of(:email) }
       it { should validate_uniqueness_of(:email).case_insensitive }
       it { should allow_values('user@example.org', 'user@example.cl').for(:email) }
-      it { should_not allow_values('', 'user', 'user@', 'user@example', 'user@example.').for(:email) }
+
+      it do
+        should_not allow_values('', 'user', 'user@', 'user@example', 'user@example.').for(:email)
+      end
     end
 
     describe 'name' do
