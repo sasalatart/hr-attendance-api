@@ -1,5 +1,0 @@
-es:
-  errors:
-    forbidden: "No tienes permiso para hacer esto"
-    not_found: "No encontrado"
-    token_expired: "Tu sesión ha expirado"

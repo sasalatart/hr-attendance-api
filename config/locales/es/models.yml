@@ -1,0 +1,30 @@
+es:
+  activerecord:
+    attributes:
+      organization:
+        name: "nombre"
+      user:
+        email: "email"
+        role: "rol"
+        organization_id: "organización"
+        name: "nombre"
+        surname: "apellido"
+        second_surname: "segundo apellido"
+      attendance:
+        employee_id: "empleado"
+        entered_at: "fecha y hora de entrada"
+        left_at: "fecha y hora de salida"
+    errors:
+      models:
+        user:
+          attributes:
+            organization_id:
+              organization_consistency: "Debe pertenecer a una organización sólo si no es administrador."
+        attendance:
+          attributes:
+            employee_id:
+              only_for_employees: "Sólo los empleados pueden tener asistencia."
+            entered_at:
+              only_one_per_day: "No puede haber dos registros para el mismo día."
+            left_at:
+              only_one_per_day: "No puede haber dos registros para el mismo día."

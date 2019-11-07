@@ -9,7 +9,7 @@ module ExceptionHandler
     end
 
     rescue_from ActiveRecord::RecordNotFound do
-      render json: i18n_error('errors.not_found'), status: :not_found
+      render json: i18n_error(:not_found), status: :not_found
     end
 
     rescue_from ActiveRecord::RecordInvalid do |e|
@@ -17,13 +17,13 @@ module ExceptionHandler
     end
 
     rescue_from JWT::ExpiredSignature do
-      render json: i18n_error('errors.token_expired'), status: :unauthorized
+      render json: i18n_error(:token_expired), status: :unauthorized
     end
   end
 
   private
 
   def i18n_error(key)
-    { error: I18n.t(key, locale: params[:locale]) }
+    { error: I18n.t("errors.messages.#{key}", locale: params[:locale]) }
   end
 end
