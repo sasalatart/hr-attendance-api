@@ -6,7 +6,11 @@ docker-compose.yml
 
 README.md
 
+.envrc
+terraform/.terraform
+terraform.tfvars
 config/master.key
+
 log
 spec
 storage
