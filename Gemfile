@@ -18,6 +18,8 @@ gem 'kaminari'
 gem 'api-pagination'
 gem 'active_model_serializers'
 
+gem 'validates_timeliness', '~> 5.0.0.alpha3'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
