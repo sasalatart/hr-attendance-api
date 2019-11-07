@@ -28,7 +28,7 @@ total_organizations.times do |org_idx|
   org_admins_per_organization.times do |org_admin_idx|
     User.create!({ role: :org_admin,
                    organization: organization,
-                   email: "#{org_idx}-#{org_admin_idx}-admin@example.org" }.merge!(common_user_params))
+                   email: "#{org_idx}-#{org_admin_idx}-org-admin@example.org" }.merge!(common_user_params))
   end
 
   employees_per_organization.times do |employee_idx|
