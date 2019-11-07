@@ -21,6 +21,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe 'associations' do
     it { should belong_to(:organization).optional }
+    it { should have_many(:attendances) }
   end
 
   describe 'validations' do
@@ -46,9 +47,9 @@ RSpec.describe User, type: :model do
           it 'must be present' do
             user = create(role)
             user.organization = nil
-            expect(user.valid?).to be false
+            expect(user).to_not be_valid
             user.organization = organization
-            expect(user.valid?).to be true
+            expect(user).to be_valid
           end
         end
       end

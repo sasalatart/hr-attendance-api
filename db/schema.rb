@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_05_171855) do
+ActiveRecord::Schema.define(version: 2019_11_07_180249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "attendances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "employee_id"
+    t.datetime "entered_at", null: false
+    t.datetime "left_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_attendances_on_employee_id"
+    t.index ["entered_at"], name: "index_attendances_on_entered_at"
+    t.index ["left_at"], name: "index_attendances_on_left_at"
+  end
 
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -38,5 +49,6 @@ ActiveRecord::Schema.define(version: 2019_11_05_171855) do
     t.index ["role"], name: "index_users_on_role"
   end
 
+  add_foreign_key "attendances", "users", column: "employee_id"
   add_foreign_key "users", "organizations"
 end
