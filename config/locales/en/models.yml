@@ -1,0 +1,30 @@
+es:
+  activerecord:
+    attributes:
+      organization:
+        name: "name"
+      user:
+        email: "email"
+        role: "role"
+        organization_id: "organization"
+        name: "name"
+        surname: "surname"
+        second_surname: "second surname"
+      attendance:
+        employee_id: "employee"
+        entered_at: "check-in time"
+        left_at: "check-out time"
+    errors:
+      models:
+        user:
+          attributes:
+            organization_id:
+              organization_consistency: "Must belong to an organization only if not admin."
+        attendance:
+          attributes:
+            employee_id:
+              only_for_employees: "Only employees may have attendance registries."
+            entered_at:
+              only_one_per_day: "There can not be two or more registries for the same day."
+            left_at:
+              only_one_per_day: "There can not be two or more registries for the same day."
