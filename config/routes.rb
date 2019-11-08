@@ -10,4 +10,8 @@ Rails.application.routes.draw do
   resources :organizations do
     resources :users, only: %i[index create update destroy], shallow: true
   end
+
+  resources :employees, only: [] do
+    resources :attendances, only: %i[create update destroy], shallow: true
+  end
 end

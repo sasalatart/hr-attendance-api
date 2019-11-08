@@ -22,8 +22,9 @@ class Ability
   end
 
   def org_admin_only_permissions
-    can %i[index create], User if @params[:organization_id] == @user.organization_id
-    can %i[update destroy], User, organization_id: @user.organization_id
+    can :index, User if @params[:organization_id] == @user.organization_id
+    can %i[create update destroy], User, organization_id: @user.organization_id
+    can %i[create update destroy], Attendance, employee_id: @user.organization.users.pluck(:id)
   end
 
   def employee_only_permissions
