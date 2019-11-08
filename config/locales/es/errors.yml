@@ -4,6 +4,8 @@ es:
       forbidden: "No tienes permiso para hacer esto"
       not_found: "No encontrado"
       token_expired: "Tu sesión ha expirado"
+      user_did_not_check_in: "No ha marcado entrada aún"
+      user_already_checked_out: "Ya había marcado salida"
       invalid_date: "no es una fecha válida"
       invalid_time: "no es una hora válida"
       invalid_datetime: "no es un momento válido"

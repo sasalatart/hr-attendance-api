@@ -22,9 +22,11 @@ es:
               organization_consistency: "Debe pertenecer a una organización sólo si no es administrador."
         attendance:
           attributes:
+            base:
+              no_overlapping: "Topa con otras asistencias del usuario."
             employee_id:
               only_for_employees: "Sólo los empleados pueden tener asistencia."
             entered_at:
-              only_one_per_day: "No puede haber dos registros para el mismo día."
+              only_one_per_employee_per_day: "No puede haber dos registros para el mismo día."
             left_at:
-              only_one_per_day: "No puede haber dos registros para el mismo día."
+              only_one_per_employee_per_day: "No puede haber dos registros para el mismo día."
