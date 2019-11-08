@@ -64,8 +64,8 @@ RSpec.describe Attendance, type: :model do
     end
 
     describe 'overlapping' do
-      start_at = 6.days.ago
-      end_at = 2.days.ago
+      start_at = 6.days.ago.beginning_of_day
+      end_at = 2.days.ago.beginning_of_day
 
       let(:employee) { create(:employee) }
       subject { build(:attendance, entered_at: entered_at, left_at: left_at, employee: employee) }

@@ -95,4 +95,110 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#check_in!' do
+    %i[admin org_admin].each do |role|
+      context "when the user is an #{role}" do
+        subject { create(role) }
+
+        it 'raises a NotEmployee error' do
+          expect { subject.check_in! }.to raise_error(Exceptions::NotEmployee)
+        end
+      end
+    end
+
+    context 'when the user is an employee' do
+      subject { create(:employee) }
+
+      context 'when the user had already checked in' do
+        before { subject.check_in! }
+
+        it 'throws a validation error' do
+          expect { subject.check_in! }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+
+      context 'when the user had not already checked in' do
+        let(:attendance) { subject.check_in! }
+
+        it 'creates a new attendance' do
+          expect { subject.check_in! }.to change { Attendance.count }.by(1)
+        end
+
+        it 'returns a persisted attendance' do
+          expect(attendance).to be_persisted
+        end
+
+        it 'assigns a timestamp to the entered_at attribute' do
+          now = DateTime.now
+          allow(DateTime).to receive(:now).and_return(now)
+          expect(attendance.entered_at.to_i).to be(now.to_i)
+        end
+
+        it 'does not assign any value to the left_at attribute' do
+          expect(attendance.left_at).to be_nil
+        end
+
+        it 'assigns the attendance to the user' do
+          expect(attendance.employee).to eql(subject)
+        end
+      end
+    end
+  end
+
+  describe '#check_out!' do
+    %i[admin org_admin].each do |role|
+      context "when the user is an #{role}" do
+        subject { create(role) }
+
+        it 'raises a NotEmployee error' do
+          expect { subject.check_out! }.to raise_error(Exceptions::NotEmployee)
+        end
+      end
+    end
+
+    context 'when the user is an employee' do
+      subject { create(:employee) }
+
+      context 'when the user had not already checked in' do
+        it 'throws a UserDidNotCheckIn error' do
+          expect { subject.check_out! }.to raise_error(Exceptions::UserDidNotCheckIn)
+        end
+      end
+
+      context 'when the user had already checked in' do
+        context 'when the user had already checked out' do
+          before do
+            subject.check_in!
+            subject.check_out!
+          end
+
+          it 'throws a UserAlreadyCheckedOut error' do
+            expect { subject.check_out! }.to raise_error(Exceptions::UserAlreadyCheckedOut)
+          end
+        end
+
+        context 'when the user had not already checked out' do
+          let(:attendance) { subject.check_out! }
+          before { subject.check_in! }
+
+          it 'does not create a new attendance' do
+            count_before = Attendance.count
+            subject.check_out!
+            expect(count_before).to be(Attendance.count)
+          end
+
+          it 'returns a persisted attendance' do
+            expect(attendance).to be_persisted
+          end
+
+          it 'assigns a timestamp to the left_at attribute' do
+            now = DateTime.now
+            allow(DateTime).to receive(:now).and_return(now)
+            expect(attendance.left_at.to_i).to be(now.to_i)
+          end
+        end
+      end
+    end
+  end
 end

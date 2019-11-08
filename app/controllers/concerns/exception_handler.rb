@@ -21,8 +21,6 @@ module ExceptionHandler
     end
   end
 
-  private
-
   def i18n_error(key)
     { error: I18n.t("errors.messages.#{key}", locale: params[:locale]) }
   end

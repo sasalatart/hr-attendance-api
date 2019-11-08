@@ -6,17 +6,27 @@ class Ability
   def initialize(user, params)
     return unless user
 
+    @user = user
+    @params = params
+
     if user.admin?
       can :manage, :all
       return
     end
 
-    if user.org_admin?
-      can %i[index create], User if params[:organization_id] == user.organization_id
-      can %i[update destroy], User, organization_id: user.organization_id
-    end
+    org_admin_only_permissions if user.org_admin?
+    employee_only_permissions if user.employee?
 
     can :show, Organization, id: user.organization_id
     can :me, User
+  end
+
+  def org_admin_only_permissions
+    can %i[index create], User if @params[:organization_id] == @user.organization_id
+    can %i[update destroy], User, organization_id: @user.organization_id
+  end
+
+  def employee_only_permissions
+    can %i[check_in check_out], Attendance
   end
 end

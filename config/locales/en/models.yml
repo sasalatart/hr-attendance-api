@@ -22,9 +22,11 @@ es:
               organization_consistency: "Must belong to an organization only if not admin."
         attendance:
           attributes:
+            base:
+              no_overlapping: "It overlaps with other attendances of the same user."
             employee_id:
               only_for_employees: "Only employees may have attendance registries."
             entered_at:
-              only_one_per_day: "There can not be two or more registries for the same day."
+              only_one_per_employee_per_day: "There can not be two or more registries for the same day."
             left_at:
-              only_one_per_day: "There can not be two or more registries for the same day."
+              only_one_per_employee_per_day: "There can not be two or more registries for the same day."

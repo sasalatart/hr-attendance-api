@@ -41,7 +41,29 @@ class User < ApplicationRecord
 
   validate :organization_present_for_non_admins_only
 
+  def check_in!
+    assert_employee!
+
+    attendances.create!(entered_at: DateTime.now)
+  end
+
+  def check_out!
+    assert_employee!
+
+    last_attendance = attendances.order(left_at: :asc).last
+
+    raise Exceptions::UserDidNotCheckIn unless last_attendance
+    raise Exceptions::UserAlreadyCheckedOut unless last_attendance.left_at.nil?
+
+    last_attendance.update!(left_at: DateTime.now)
+    last_attendance
+  end
+
   private
+
+  def assert_employee!
+    raise Exceptions::NotEmployee unless employee?
+  end
 
   def downcase_email
     self.email = email.downcase if will_save_change_to_attribute?(:email)
