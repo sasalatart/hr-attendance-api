@@ -95,6 +95,56 @@ RSpec.describe 'Users requests' do
     end
   end
 
+  describe 'GET /employees/:id/attendances' do
+    let(:http_method) { :get }
+    let(:url) { "/employees/#{employee.id}/attendances" }
+    let(:organization) { create(:organization) }
+    let(:employee) { create(:employee, organization: organization) }
+
+    shared_examples_for 'a successful employee attendances request' do
+      before { get url, headers: authenticated_header(requester) }
+
+      it_behaves_like 'an ok request'
+      it_behaves_like 'a paginated request'
+
+      it 'responds with the serialized attendances from the specified employee only' do
+        expected = ActiveModel::Serializer::CollectionSerializer.new(
+          employee.attendances,
+          each_serializer: AttendanceSerializer
+        )
+        expect(response.body).to eql(expected.to_json)
+      end
+    end
+
+    it_behaves_like 'a request that needs authentication'
+
+    context 'when the user is authenticated' do
+      context 'when the user is an employee' do
+        context 'when the user is requesting their own attendances' do
+          let(:requester) { employee }
+          it_behaves_like 'a successful employee attendances request'
+        end
+
+        context "when the user is requesting someone else's attendances" do
+          let(:requester) { create(:employee, organization: organization) }
+          it_behaves_like 'a forbidden request'
+        end
+      end
+
+      context 'when the user is an org admin' do
+        context 'when the org admin belongs to another organization' do
+          let(:requester) { create(:org_admin) }
+          it_behaves_like 'a forbidden request'
+        end
+
+        context 'when the org admin belongs to the organization' do
+          let(:requester) { create(:org_admin, organization: organization) }
+          it_behaves_like 'a successful employee attendances request'
+        end
+      end
+    end
+  end
+
   describe 'POST /organizations/:id/users' do
     let(:http_method) { :post }
     let(:url) { "/organizations/#{organization.id}/users" }

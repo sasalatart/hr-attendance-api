@@ -8,10 +8,13 @@ Rails.application.routes.draw do
   put '/attendances/check-outs' => 'attendances#check_out'
 
   resources :organizations do
-    resources :users, only: %i[index create update destroy], shallow: true
-  end
+    member { get :attendances }
 
-  resources :employees, only: [] do
-    resources :attendances, only: %i[create update destroy], shallow: true
+    resources :users, only: %i[index create update destroy], shallow: true
+
+    resources :employees, only: [], shallow: true do
+      member { get :attendances, controller: :users }
+      resources :attendances, only: %i[create update destroy], shallow: true
+    end
   end
 end

@@ -13,6 +13,10 @@ class OrganizationsController < ApplicationController
     render json: @organization
   end
 
+  def attendances
+    paginate json: @organization.attendances.order(entered_at: :asc)
+  end
+
   def create
     @organization.save!
     render json: @organization, status: :created

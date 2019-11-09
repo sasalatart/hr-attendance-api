@@ -7,6 +7,7 @@ RSpec.describe UsersController, type: :controller do
 
   it { should route(:get, '/organizations/id/users').to(action: :index, organization_id: 'id') }
   it { should route(:get, '/users/me').to(action: :me) }
+  it { should route(:get, '/employees/id/attendances').to(action: :attendances, id: 'id') }
   it { should route(:post, '/organizations/id/users').to(action: :create, organization_id: 'id') }
   it { should route(:put, '/users/id').to(action: :update, id: 'id') }
   it { should route(:delete, '/users/id').to(action: :destroy, id: 'id') }

@@ -2,10 +2,10 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require_relative '../lib/exceptions'
 require_relative './support/authentication'
 require_relative './support/factory_bot'
 require_relative './support/shared_examples'
-require_relative '../lib/exceptions'
 
 ENV['RAILS_ENV'] ||= 'test'
 
