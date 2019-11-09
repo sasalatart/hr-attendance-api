@@ -205,7 +205,10 @@ RSpec.describe User, type: :model do
   describe 'serialization' do
     %i[admin org_admin employee].each do |role|
       context "when the role is #{role}" do
-        let(:user) { create(role, second_surname: 'Second Surname') }
+        let(:user) do
+          num_attendances = role == :employee ? 2 : 0
+          create(role, second_surname: 'Second Surname', num_attendances: num_attendances)
+        end
         subject { UserSerializer.new(user).as_json }
 
         it 'serializes id' do
@@ -218,6 +221,14 @@ RSpec.describe User, type: :model do
 
         it 'serializes organization_id' do
           expect(subject[:organization_id]).to eql(user.organization_id)
+        end
+
+        if role == :employee
+          it 'serializes last_attendance' do
+            last_attendance = user.attendances.order(entered_at: :asc).last
+            expected = AttendanceSerializer.new(last_attendance).as_json
+            expect(subject[:last_attendance]).to eql(expected)
+          end
         end
 
         it 'serializes email' do
