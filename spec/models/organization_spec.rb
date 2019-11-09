@@ -40,6 +40,15 @@ RSpec.describe Organization, type: :model do
     let(:organization) { create(:organization) }
     subject { OrganizationSerializer.new(organization).as_json }
 
+    it 'only serializes some attributes' do
+      expect(subject.keys).to contain_exactly(
+        :id,
+        :name,
+        :updated_at,
+        :created_at
+      )
+    end
+
     it 'serializes id' do
       expect(subject[:id]).to eql(organization.id)
     end

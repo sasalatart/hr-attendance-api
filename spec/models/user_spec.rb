@@ -211,6 +211,21 @@ RSpec.describe User, type: :model do
         end
         subject { UserSerializer.new(user).as_json }
 
+        it 'only serializes some attributes' do
+          expect(subject.keys).to contain_exactly(
+            :id,
+            :role,
+            :organization_id,
+            :last_attendance,
+            :email,
+            :name,
+            :surname,
+            :second_surname,
+            :updated_at,
+            :created_at
+          )
+        end
+
         it 'serializes id' do
           expect(subject[:id]).to eql(user.id)
         end
