@@ -13,6 +13,10 @@ class UsersController < ApplicationController
     render json: current_user, status: :ok
   end
 
+  def attendances
+    paginate json: @user.attendances.order(entered_at: :asc)
+  end
+
   def create
     @user.save!
     render json: @user, status: :created

@@ -31,11 +31,12 @@ class Attendance < ApplicationRecord
   private
 
   def overlapping_ids
-    Attendance.where(employee_id: employee_id).where(
+    employee_attendances = Attendance.where(employee_id: employee_id)
+    employee_attendances.where(
       'entered_at >= ? and entered_at <= ?', entered_at, left_at
-    ).or(Attendance.where(
+    ).or(employee_attendances.where(
            'left_at >= ? and left_at <= ?', entered_at, left_at
-         )).or(Attendance.where(
+         )).or(employee_attendances.where(
                  'entered_at <= ? and left_at >= ?', entered_at, left_at
                )).pluck(:id)
   end

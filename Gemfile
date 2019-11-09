@@ -31,13 +31,13 @@ gem 'faker'
 
 group :test do
   gem 'factory_bot_rails'
+  gem 'rspec_junit_formatter'
+  gem 'rspec-rails', '~> 3.8'
   gem 'shoulda-matchers'
 end
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'rspec-rails', '~> 3.8'
-  gem 'rspec_junit_formatter'
   gem 'rubocop', require: false
 end
 

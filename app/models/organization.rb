@@ -12,6 +12,7 @@
 
 class Organization < ApplicationRecord
   has_many :users, dependent: :destroy
+  has_many :attendances, through: :users
 
   validates :name, presence: true,
                    uniqueness: { allow_blank: true, case_sensitive: false }

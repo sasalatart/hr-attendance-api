@@ -29,9 +29,10 @@ RSpec.describe 'Organizations requests' do
         it_behaves_like 'a paginated request'
 
         it 'responds with the serialized organizations' do
-          expected = Organization.all.limit(25).map do |organization|
-            OrganizationSerializer.new(organization)
-          end
+          expected = ActiveModel::Serializer::CollectionSerializer.new(
+            Organization.all.limit(25),
+            each_serializer: OrganizationSerializer
+          )
           expect(response.body).to eql(expected.to_json)
         end
       end
@@ -74,6 +75,60 @@ RSpec.describe 'Organizations requests' do
       context 'when the user is an admin' do
         let(:requester) { create(:admin) }
         it_behaves_like 'a successful show request'
+      end
+    end
+  end
+
+  describe 'GET /organizations/:id/attendances' do
+    let(:http_method) { :get }
+    let(:url) { "/organizations/#{organization.id}/attendances" }
+    let(:organization) { create(:organization) }
+
+    it_behaves_like 'a request that needs authentication'
+
+    context 'when the user is authenticated' do
+      context 'when the user is an employee' do
+        context 'when the employee does not belong to the organization' do
+          let(:requester) { create(:employee) }
+          it_behaves_like 'a forbidden request'
+        end
+
+        context 'when the employee belongs to the organization' do
+          let(:requester) { create(:employee, organization: organization) }
+          it_behaves_like 'a forbidden request'
+        end
+      end
+
+      context 'when the user is an org admin' do
+        context 'when the org admin does not belong to the organization' do
+          let(:requester) { create(:org_admin) }
+          it_behaves_like 'a forbidden request'
+        end
+
+        context 'when the org admin belongs to the organization' do
+          let(:requester) { create(:org_admin, organization: organization) }
+
+          before do
+            2.times do
+              create(:employee, organization: organization, num_attendances: 2)
+              create(:employee, num_attendances: 2)
+            end
+
+            get url, headers: authenticated_header(requester)
+          end
+
+          it_behaves_like 'an ok request'
+          it_behaves_like 'a paginated request'
+
+          it 'responds with the serialized attendances from the specified organization only' do
+            attendances = organization.attendances.order(entered_at: :asc)
+            expected = ActiveModel::Serializer::CollectionSerializer.new(
+              attendances,
+              each_serializer: AttendanceSerializer
+            )
+            expect(response.body).to eql(expected.to_json)
+          end
+        end
       end
     end
   end
