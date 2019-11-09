@@ -109,6 +109,9 @@ RSpec.describe 'Organizations requests' do
           let(:requester) { create(:org_admin, organization: organization) }
 
           before do
+            now = DateTime.now
+            allow(DateTime).to receive(:now).and_return(now)
+
             2.times do
               create(:employee, organization: organization, num_attendances: 2)
               create(:employee, num_attendances: 2)
