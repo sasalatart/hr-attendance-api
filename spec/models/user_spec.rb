@@ -201,4 +201,49 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'serialization' do
+    %i[admin org_admin employee].each do |role|
+      context "when the role is #{role}" do
+        let(:user) { create(role, second_surname: 'Second Surname') }
+        subject { UserSerializer.new(user).as_json }
+
+        it 'serializes id' do
+          expect(subject[:id]).to eql(user.id)
+        end
+
+        it 'serializes role' do
+          expect(subject[:role]).to eql(role.to_s)
+        end
+
+        it 'serializes organization_id' do
+          expect(subject[:organization_id]).to eql(user.organization_id)
+        end
+
+        it 'serializes email' do
+          expect(subject[:email]).to eql(user.email)
+        end
+
+        it 'serializes name' do
+          expect(subject[:name]).to eql(user.name)
+        end
+
+        it 'serializes surname' do
+          expect(subject[:surname]).to eql(user.surname)
+        end
+
+        it 'serializes second_surname' do
+          expect(subject[:second_surname]).to eql(user.second_surname)
+        end
+
+        it 'serializes updated_at' do
+          expect(subject[:updated_at]).to eql(user.updated_at)
+        end
+
+        it 'serializes created_at' do
+          expect(subject[:created_at]).to eql(user.created_at)
+        end
+      end
+    end
+  end
 end

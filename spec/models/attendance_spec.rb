@@ -148,4 +148,33 @@ RSpec.describe Attendance, type: :model do
       end
     end
   end
+
+  describe 'serialization' do
+    let(:attendance) { create(:attendance, entered_at: 10.hours.ago, left_at: 1.hour.ago) }
+    subject { AttendanceSerializer.new(attendance).as_json }
+
+    it 'serializes id' do
+      expect(subject[:id]).to eql(attendance.id)
+    end
+
+    it 'serializes employee_id' do
+      expect(subject[:employee_id]).to eql(attendance.employee_id)
+    end
+
+    it 'serializes entered_at' do
+      expect(subject[:entered_at]).to eql(attendance.entered_at)
+    end
+
+    it 'serializes left_at' do
+      expect(subject[:left_at]).to eql(attendance.left_at)
+    end
+
+    it 'serializes updated_at' do
+      expect(subject[:updated_at]).to eql(attendance.updated_at)
+    end
+
+    it 'serializes created_at' do
+      expect(subject[:created_at]).to eql(attendance.created_at)
+    end
+  end
 end
