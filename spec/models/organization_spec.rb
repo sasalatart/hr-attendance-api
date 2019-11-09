@@ -35,4 +35,25 @@ RSpec.describe Organization, type: :model do
       expect(User.where(organization_id: organization.id).count).to be 0
     end
   end
+
+  describe 'serialization' do
+    let(:organization) { create(:organization) }
+    subject { OrganizationSerializer.new(organization).as_json }
+
+    it 'serializes id' do
+      expect(subject[:id]).to eql(organization.id)
+    end
+
+    it 'serializes name' do
+      expect(subject[:name]).to eql(organization.name)
+    end
+
+    it 'serializes updated_at' do
+      expect(subject[:updated_at]).to eql(organization.updated_at)
+    end
+
+    it 'serializes created_at' do
+      expect(subject[:created_at]).to eql(organization.created_at)
+    end
+  end
 end
