@@ -157,6 +157,7 @@ RSpec.describe Attendance, type: :model do
       expect(subject.keys).to contain_exactly(
         :id,
         :employee_id,
+        :employee_fullname,
         :entered_at,
         :left_at,
         :updated_at,
@@ -170,6 +171,14 @@ RSpec.describe Attendance, type: :model do
 
     it 'serializes employee_id' do
       expect(subject[:employee_id]).to eql(attendance.employee_id)
+    end
+
+    it 'serializes employee_fullname' do
+      employee = attendance.employee
+      expected = %i[name surname second_surname].map do |attribute|
+        employee[attribute]
+      end.compact.join(' ')
+      expect(subject[:employee_fullname]).to eql(expected)
     end
 
     it 'serializes entered_at' do
