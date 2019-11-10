@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :organizations do
     member { get :attendances }
 
-    resources :users, only: %i[index create update destroy], shallow: true
+    resources :users, shallow: true
 
     resources :employees, only: [], shallow: true do
       member { get :attendances, controller: :users }

@@ -76,6 +76,98 @@ RSpec.describe 'Users requests' do
     end
   end
 
+  describe 'GET /users/:id' do
+    let(:http_method) { :get }
+    let(:url) { "/users/#{target_user.id}" }
+    let(:organization) { create(:organization) }
+    let(:another_organization) { create(:organization) }
+    let(:target_user) { create(:employee, organization: organization) }
+
+    shared_examples_for 'a successful show request' do
+      before { get url, headers: authenticated_header(requester) }
+
+      it_behaves_like 'an ok request'
+
+      it 'responds with the serialized user' do
+        expect(response.body).to eql(UserSerializer.new(target_user).to_json)
+      end
+    end
+
+    it_behaves_like 'a request that needs authentication'
+
+    context 'when the user is authenticated' do
+      context 'when the user is an employee' do
+        let(:requester) { create(:employee, organization: organization) }
+
+        context 'when the target user is from another organization' do
+          %i[org_admin employee].each do |role|
+            context "when the target user is an #{role}" do
+              let(:target_user) { create(role, organization: another_organization) }
+              it_behaves_like 'a forbidden request'
+            end
+          end
+        end
+
+        context 'when the target user is from the same organization' do
+          %i[org_admin employee].each do |role|
+            context "when the target user is an #{role}" do
+              let(:target_user) { create(role, organization: organization) }
+              it_behaves_like 'a forbidden request'
+            end
+          end
+        end
+
+        context 'when the target user is an admin' do
+          let(:target_user) { create(:admin) }
+          it_behaves_like 'a forbidden request'
+        end
+      end
+
+      context 'when the user is an org admin' do
+        let(:requester) { create(:org_admin, organization: organization) }
+
+        context 'when the target user is from another organization' do
+          %i[org_admin employee].each do |role|
+            context "when the target user is an #{role}" do
+              let(:target_user) { create(role, organization: another_organization) }
+              it_behaves_like 'a forbidden request'
+            end
+          end
+        end
+
+        context 'when the target user is from the same organization' do
+          %i[org_admin employee].each do |role|
+            context "when the target user is an #{role}" do
+              let(:target_user) { create(role, organization: organization) }
+              it_behaves_like 'a successful show request'
+            end
+          end
+        end
+
+        context 'when the target user is an admin' do
+          let(:target_user) { create(:admin) }
+          it_behaves_like 'a forbidden request'
+        end
+      end
+
+      context 'when the user is an admin' do
+        let(:requester) { create(:admin) }
+
+        %i[org_admin employee].each do |role|
+          context "when the target user is an #{role}" do
+            let(:target_user) { create(role) }
+            it_behaves_like 'a successful show request'
+          end
+        end
+
+        context 'when the target user is an admin' do
+          let(:target_user) { create(:admin) }
+          it_behaves_like 'a successful show request'
+        end
+      end
+    end
+  end
+
   describe 'GET /users/me' do
     let(:http_method) { :get }
     let(:url) { '/users/me' }
