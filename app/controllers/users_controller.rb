@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def attendances
-    paginate json: @user.attendances.order(entered_at: :asc)
+    paginate json: @user.attendances.order(entered_at: :desc)
   end
 
   def create

@@ -201,7 +201,7 @@ RSpec.describe 'Users requests' do
 
       it 'responds with the serialized attendances from the specified employee only' do
         expected = ActiveModel::Serializer::CollectionSerializer.new(
-          employee.attendances,
+          employee.attendances.order(entered_at: :desc),
           each_serializer: AttendanceSerializer
         )
         expect(response.body).to eql(expected.to_json)
