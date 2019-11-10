@@ -9,6 +9,10 @@ class UsersController < ApplicationController
     paginate json: User.where(role: params[:role], organization_id: params[:organization_id])
   end
 
+  def show
+    render json: @user
+  end
+
   def me
     render json: current_user, status: :ok
   end
