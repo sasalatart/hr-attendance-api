@@ -29,6 +29,8 @@ User.create!({ role: :admin,
                email: 'admin@example.org' }.merge!(common_user_params))
 
 used_organization_names = []
+org_admin_count = 0
+employee_count = 0
 total_organizations.times do |org_idx|
   puts "Creating organization #{org_idx + 1}/#{total_organizations}"
 
@@ -37,17 +39,17 @@ total_organizations.times do |org_idx|
   used_organization_names << name
   organization = Organization.create!(name: name)
 
-  org_admins_per_organization.times do |org_admin_idx|
+  org_admins_per_organization.times do
     params = { role: :org_admin,
                organization: organization,
-               email: "#{org_idx}-#{org_admin_idx}-org-admin@example.org" }
+               email: "org-admin-#{org_admin_count += 1}@example.org" }
     User.create!(params.merge!(common_user_params))
   end
 
-  employees_per_organization.times do |employee_idx|
+  employees_per_organization.times do
     params = { role: :employee,
                organization: organization,
-               email: "#{org_idx}-#{employee_idx}-employee@example.org" }
+               email: "employee-#{employee_count += 1}@example.org" }
     employee = User.create!(params.merge!(common_user_params))
     add_attendances_to(employee)
   end
