@@ -28,7 +28,7 @@ class User < ApplicationRecord
   before_save :downcase_email
 
   belongs_to :organization, optional: true
-  has_many :attendances, foreign_key: :employee_id
+  has_many :attendances, foreign_key: :employee_id, dependent: :destroy
 
   validates :role, presence: true
 

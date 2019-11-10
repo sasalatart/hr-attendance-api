@@ -21,7 +21,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe 'associations' do
     it { should belong_to(:organization).optional }
-    it { should have_many(:attendances) }
+    it { should have_many(:attendances).dependent(:destroy) }
   end
 
   describe 'validations' do
