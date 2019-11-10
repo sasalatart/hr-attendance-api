@@ -14,7 +14,7 @@ class OrganizationsController < ApplicationController
   end
 
   def attendances
-    paginate json: @organization.attendances.joins(:employee).order(entered_at: :asc)
+    paginate json: @organization.attendances.joins(:employee).order(entered_at: :desc)
   end
 
   def create

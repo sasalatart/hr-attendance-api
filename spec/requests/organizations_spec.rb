@@ -124,7 +124,7 @@ RSpec.describe 'Organizations requests' do
           it_behaves_like 'a paginated request'
 
           it 'responds with the serialized attendances from the specified organization only' do
-            attendances = organization.attendances.order(entered_at: :asc)
+            attendances = organization.attendances.order(entered_at: :desc)
             expected = ActiveModel::Serializer::CollectionSerializer.new(
               attendances,
               each_serializer: AttendanceSerializer
