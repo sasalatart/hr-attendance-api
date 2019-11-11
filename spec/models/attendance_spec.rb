@@ -10,6 +10,7 @@
 #  left_at     :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  timezone    :string           not null
 #
 
 require 'rails_helper'
@@ -60,6 +61,15 @@ RSpec.describe Attendance, type: :model do
         attendance.entered_at = 10.hours.ago
         attendance.left_at = 1.hour.ago
         expect(attendance).to be_valid
+      end
+    end
+
+    describe 'timezone' do
+      it { should validate_presence_of(:timezone) }
+
+      it do
+        timezones = ActiveSupport::TimeZone.all.map { |tz| tz.tzinfo.name }
+        should validate_inclusion_of(:timezone).in_array timezones
       end
     end
 
@@ -160,6 +170,7 @@ RSpec.describe Attendance, type: :model do
         :employee_fullname,
         :entered_at,
         :left_at,
+        :timezone,
         :updated_at,
         :created_at
       )
@@ -187,6 +198,10 @@ RSpec.describe Attendance, type: :model do
 
     it 'serializes left_at' do
       expect(subject[:left_at]).to eql(attendance.left_at)
+    end
+
+    it 'serializes timezone' do
+      expect(subject[:timezone]).to eql(attendance.timezone)
     end
 
     it 'serializes updated_at' do

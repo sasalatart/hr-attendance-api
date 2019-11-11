@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 class AttendanceSerializer < ActiveModel::Serializer
-  attributes :id, :employee_id, :employee_fullname, :entered_at, :left_at, :updated_at, :created_at
+  attributes :id,
+             :employee_id,
+             :employee_fullname,
+             :entered_at,
+             :left_at,
+             :timezone,
+             :updated_at,
+             :created_at
 
   def employee_fullname
     employee = object.employee

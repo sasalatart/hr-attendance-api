@@ -14,6 +14,7 @@
 #  name            :string           not null
 #  surname         :string           not null
 #  second_surname  :string
+#  timezone        :string           not null
 #
 
 require 'rails_helper'
@@ -82,6 +83,15 @@ RSpec.describe User, type: :model do
     describe 'password' do
       it { should have_secure_password }
       it { should validate_confirmation_of(:password) }
+    end
+
+    describe 'timezone' do
+      it { should validate_presence_of(:timezone) }
+
+      it do
+        timezones = ActiveSupport::TimeZone.all.map { |tz| tz.tzinfo.name }
+        should validate_inclusion_of(:timezone).in_array timezones
+      end
     end
   end
 
@@ -222,7 +232,8 @@ RSpec.describe User, type: :model do
             :surname,
             :second_surname,
             :updated_at,
-            :created_at
+            :created_at,
+            :timezone
           )
         end
 
@@ -260,6 +271,10 @@ RSpec.describe User, type: :model do
 
         it 'serializes second_surname' do
           expect(subject[:second_surname]).to eql(user.second_surname)
+        end
+
+        it 'serializes timezone' do
+          expect(subject[:timezone]).to eql(user.timezone)
         end
 
         it 'serializes updated_at' do

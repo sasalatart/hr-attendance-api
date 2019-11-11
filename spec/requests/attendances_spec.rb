@@ -15,8 +15,9 @@ RSpec.describe 'Attendances requests' do
 
       context 'when the user is an employee' do
         now = DateTime.now
+        timezone = 'America/Santiago'
 
-        let(:requester) { create(:employee) }
+        let(:requester) { create(:employee, timezone: timezone) }
         let(:expected) { Attendance.order(created_at: :asc).last }
 
         before do
@@ -32,6 +33,10 @@ RSpec.describe 'Attendances requests' do
 
         it 'assigns a timestamp to the entered_at value' do
           expect(expected.entered_at.to_i).to be(now.to_i)
+        end
+
+        it "assigns the user's timezone to the attendance" do
+          expect(expected.timezone).to eql(timezone)
         end
       end
     end
@@ -74,7 +79,7 @@ RSpec.describe 'Attendances requests' do
   describe 'POST /employees/:employee_id/attendances' do
     let(:http_method) { :post }
     let(:url) { "/employees/#{target_employee.id}/attendances" }
-    valid_body = { entered_at: 10.hours.ago, left_at: 1.hour.ago }
+    valid_body = { entered_at: 10.hours.ago, left_at: 1.hour.ago, timezone: 'America/Santiago' }
     let(:body) { valid_body }
 
     let(:organization) { create(:organization) }
@@ -127,6 +132,10 @@ RSpec.describe 'Attendances requests' do
         it 'sets the specified employee' do
           expect(@attendance.employee_id).to eql(target_employee.id)
         end
+
+        it 'sets the specified timezone' do
+          expect(@attendance.timezone).to eql(body[:timezone])
+        end
       end
     end
   end
@@ -134,7 +143,7 @@ RSpec.describe 'Attendances requests' do
   describe 'PUT /attendances/:id' do
     let(:http_method) { :put }
     let(:url) { "/attendances/#{target_attendance.id}" }
-    valid_body = { entered_at: 10.hours.ago, left_at: 1.hour.ago }
+    valid_body = { entered_at: 10.hours.ago, left_at: 1.hour.ago, timezone: 'America/Santiago' }
     let(:body) { valid_body }
 
     let(:organization) { create(:organization) }
@@ -196,6 +205,10 @@ RSpec.describe 'Attendances requests' do
 
         it 'does not change the employee' do
           expect(@attendance.employee_id).to eql(target_attendance.employee_id)
+        end
+
+        it 'sets the timezone value' do
+          expect(@attendance.timezone).to eql(body[:timezone])
         end
       end
     end

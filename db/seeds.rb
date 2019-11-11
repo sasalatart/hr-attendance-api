@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 DEFAULT_PASSWORD = 'napoleon'
+DEFAULT_TIMEZONE = 'America/Mexico_City'
 total_organizations = 5
 org_admins_per_organization = 5
 employees_per_organization = 35
@@ -9,7 +10,8 @@ def common_user_params
   {
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    password: DEFAULT_PASSWORD
+    password: DEFAULT_PASSWORD,
+    timezone: DEFAULT_TIMEZONE
   }
 end
 
@@ -21,7 +23,11 @@ def add_attendances_to(employee)
 
     entered_at = bod + 9.hours + (rand * 30).minutes
     left_at = entered_at + 9.hours + (rand * 30).minutes
-    employee.attendances.create!(entered_at: entered_at, left_at: left_at)
+    employee.attendances.create!(
+      entered_at: entered_at,
+      left_at: left_at,
+      timezone: DEFAULT_TIMEZONE
+    )
   end
 end
 
