@@ -29,8 +29,8 @@ class Attendance < ApplicationRecord
 
   validate :employee, :only_for_employees
   validate :entered_at, :no_overlapping
-  validate :entered_at, :only_one_entered_at_per_employee_per_day
-  validate :left_at, :only_one_left_at_per_employee_per_day
+  validate :left_at, :only_one_open_at_the_time
+  validate :left_at, :only_last_may_be_open
 
   private
 
@@ -52,34 +52,29 @@ class Attendance < ApplicationRecord
     errors.add(:base, :no_overlapping)
   end
 
+  def only_one_open_at_the_time
+    open_ids = Attendance.where(employee_id: employee_id, left_at: nil).pluck(:id)
+    return if open_ids.empty? || (open_ids.size == 1 && open_ids.include?(id))
+
+    errors.add(:base, :only_one_open_at_the_time)
+  end
+
+  def only_last_may_be_open
+    return if left_at
+
+    after_count = Attendance.where(employee_id: employee_id)
+                            .where('entered_at > ?', entered_at)
+                            .count
+
+    return if after_count.zero?
+
+    errors.add(:base, :only_last_may_be_open)
+  end
+
   def only_for_employees
     return unless will_save_change_to_attribute?(:employee_id)
     return if employee&.employee?
 
     errors.add(:employee_id, :only_for_employees)
-  end
-
-  def no_other_in_same_day?(attribute_name)
-    value = self[attribute_name]
-    bod = value.beginning_of_day
-    eod = value.end_of_day
-    ids = Attendance.where(employee_id: employee_id).where(
-      "#{attribute_name} >= ? and #{attribute_name} <= ?", bod, eod
-    ).pluck(:id)
-    ids.empty? || ids.size == 1 && ids.include?(id)
-  end
-
-  def only_one_left_at_per_employee_per_day
-    return unless left_at && will_save_change_to_attribute?(:left_at)
-    return if no_other_in_same_day?(:left_at)
-
-    errors.add(:left_at, :only_one_per_employee_per_day)
-  end
-
-  def only_one_entered_at_per_employee_per_day
-    return unless will_save_change_to_attribute?(:entered_at)
-    return if no_other_in_same_day?(:entered_at)
-
-    errors.add(:entered_at, :only_one_per_employee_per_day)
   end
 end

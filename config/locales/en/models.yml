@@ -24,9 +24,7 @@ en:
           attributes:
             base:
               no_overlapping: "It overlaps with other attendances of the same user."
+              only_one_open_at_the_time: "Only one attendance may be open for each employee at one same time."
+              only_last_may_be_open: "Only the last attendance for each employee may be open."
             employee_id:
               only_for_employees: "Only employees may have attendance registries."
-            entered_at:
-              only_one_per_employee_per_day: "There can not be two or more registries for the same day."
-            left_at:
-              only_one_per_employee_per_day: "There can not be two or more registries for the same day."

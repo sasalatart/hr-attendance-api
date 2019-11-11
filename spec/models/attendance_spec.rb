@@ -62,6 +62,69 @@ RSpec.describe Attendance, type: :model do
         attendance.left_at = 1.hour.ago
         expect(attendance).to be_valid
       end
+
+      context 'when there is another attendance with no left_at' do
+        let(:employee) { create(:employee) }
+
+        subject do
+          build(:attendance, employee: employee,
+                             entered_at: prev_attendance.entered_at + 1.day,
+                             left_at: nil)
+        end
+
+        context 'when that attendance belongs to another employee' do
+          let(:prev_attendance) { create(:attendance, entered_at: 2.days.ago, left_at: nil) }
+
+          it 'can be nil' do
+            expect(subject).to be_valid
+          end
+        end
+
+        context 'when that attendance belongs to the same employee' do
+          let(:prev_attendance) do
+            create(:attendance, employee: employee, entered_at: 2.days.ago, left_at: nil)
+          end
+
+          it 'can not be nil' do
+            expect(subject).to_not be_valid
+
+            prev_attendance.left_at = prev_attendance.entered_at + 9.hours
+            prev_attendance.save!
+            expect(subject).to be_valid
+          end
+        end
+      end
+
+      context 'when there is another closed attendance chronologically after' do
+        let(:employee) { create(:employee) }
+
+        subject do
+          build(:attendance, employee: employee,
+                             entered_at: next_attendance.entered_at - 1.day,
+                             left_at: nil)
+        end
+
+        context 'when that attendance belongs to another employee' do
+          let(:next_attendance) { create(:attendance, entered_at: 2.days.ago, left_at: 1.day.ago) }
+
+          it 'can be nil' do
+            expect(subject).to be_valid
+          end
+        end
+
+        context 'when that attendance belongs to the same employee' do
+          let(:next_attendance) do
+            create(:attendance, employee: employee, entered_at: 2.days.ago, left_at: 1.day.ago)
+          end
+
+          it 'can not be nil' do
+            expect(subject).to_not be_valid
+
+            next_attendance.destroy
+            expect(subject).to be_valid
+          end
+        end
+      end
     end
 
     describe 'timezone' do
@@ -112,49 +175,6 @@ RSpec.describe Attendance, type: :model do
         let(:entered_at) { start_at - 18.hours }
         let(:left_at) { start_at - 9.hours }
         it { should be_valid }
-      end
-    end
-
-    describe 'registries per day' do
-      bod = DateTime.now.beginning_of_day - 1.week
-
-      shared_examples_for 'not able to have two registries in a same day' do |stamps|
-        subject do
-          build(:attendance, entered_at: stamps[0][:e_at], left_at: stamps[0][:l_at])
-        end
-
-        before do
-          create(
-            :attendance, employee: other_attendance_employee,
-                         entered_at: stamps[1][:e_at],
-                         left_at: stamps[1][:l_at]
-          )
-        end
-
-        context 'when the other attendance belongs to the same employee' do
-          let(:other_attendance_employee) { subject.employee }
-          it { should_not be_valid }
-        end
-
-        context 'when the other attendance belongs to another employee' do
-          let(:other_attendance_employee) { create(:employee) }
-          it { should be_valid }
-        end
-      end
-
-      [
-        # different entered_at but in same day, different left_at in a different day
-        [
-          { e_at: bod, l_at: bod + 9.hours },
-          { e_at: bod + 20.hours, l_at: bod + 29.hours }
-        ],
-        # different entered_at in a different day, different left_at in the same day
-        [
-          { e_at: bod - 1.hour, l_at: bod + 8.hours },
-          { e_at: bod + 10.hours, l_at: bod + 19.hours }
-        ]
-      ].each do |stamps|
-        it_behaves_like 'not able to have two registries in a same day', stamps
       end
     end
   end

@@ -24,9 +24,7 @@ es:
           attributes:
             base:
               no_overlapping: "Topa con otras asistencias del usuario."
+              only_one_open_at_the_time: "No puede haber dos o más asistencias sin cerrar para un empleado al mismo tiempo."
+              only_last_may_be_open: "Sólo la última asistencia puede estar abierta para un empleado al mismo tiempo."
             employee_id:
               only_for_employees: "Sólo los empleados pueden tener asistencia."
-            entered_at:
-              only_one_per_employee_per_day: "No puede haber dos registros para el mismo día."
-            left_at:
-              only_one_per_employee_per_day: "No puede haber dos registros para el mismo día."
