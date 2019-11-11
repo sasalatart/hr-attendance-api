@@ -247,7 +247,8 @@ RSpec.describe 'Users requests' do
                    password_confirmation: 'creation-password',
                    name: 'creation-name',
                    surname: 'creation-surname',
-                   second_surname: 'creation-second-surname' }
+                   second_surname: 'creation-second-surname',
+                   timezone: 'America/Santiago' }
 
     let(:body) { valid_body }
     let(:organization) { create(:organization) }
@@ -288,6 +289,10 @@ RSpec.describe 'Users requests' do
 
       it 'sets the password' do
         expect(@user.authenticate(body[:password])).to be_truthy
+      end
+
+      it 'sets the timezone' do
+        expect(@user.timezone).to eql(body[:timezone])
       end
     end
 
@@ -354,7 +359,8 @@ RSpec.describe 'Users requests' do
                    password_confirmation: 'update-password',
                    name: 'update-name',
                    surname: 'update-surname',
-                   second_surname: 'update-second-surname' }
+                   second_surname: 'update-second-surname',
+                   timezone: 'America/Santiago' }
 
     let(:body) { valid_body }
 
@@ -407,6 +413,10 @@ RSpec.describe 'Users requests' do
 
       it 'updates the password' do
         expect(@upated_user.authenticate(body[:password])).to be_truthy
+      end
+
+      it 'updates the timezone' do
+        expect(@upated_user.timezone).to eql(body[:timezone])
       end
     end
 

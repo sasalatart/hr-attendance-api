@@ -43,22 +43,22 @@ class UsersController < ApplicationController
       :role,
       :organization_id,
       :email,
-      :password,
-      :password_confirmation,
+      :password, :password_confirmation,
       :name,
       :surname,
-      :second_surname
+      :second_surname,
+      :timezone
     )
   end
 
   def update_params
     params.permit(
       :email,
-      :password,
-      :password_confirmation,
+      :password, :password_confirmation,
       :name,
       :surname,
-      :second_surname
+      :second_surname,
+      :timezone
     )
   end
 end

@@ -9,6 +9,7 @@ class UserSerializer < ActiveModel::Serializer
              :name,
              :surname,
              :second_surname,
+             :timezone,
              :updated_at,
              :created_at
 

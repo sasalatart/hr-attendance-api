@@ -10,6 +10,7 @@
 #  left_at     :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  timezone    :string           not null
 #
 
 class Attendance < ApplicationRecord
@@ -22,6 +23,9 @@ class Attendance < ApplicationRecord
   validates_datetime :left_at, after: :entered_at,
                                before: -> { 1.second.from_now },
                                allow_nil: true
+
+  validates :timezone, presence: true,
+                       inclusion: { in: ActiveSupport::TimeZone.all.map { |tz| tz.tzinfo.name } }
 
   validate :employee, :only_for_employees
   validate :entered_at, :no_overlapping

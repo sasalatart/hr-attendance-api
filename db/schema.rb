@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_180249) do
+ActiveRecord::Schema.define(version: 2019_11_11_133955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_180249) do
     t.datetime "left_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "timezone", null: false
     t.index ["employee_id"], name: "index_attendances_on_employee_id"
     t.index ["entered_at"], name: "index_attendances_on_entered_at"
     t.index ["left_at"], name: "index_attendances_on_left_at"
@@ -44,6 +45,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_180249) do
     t.string "name", null: false
     t.string "surname", null: false
     t.string "second_surname"
+    t.string "timezone", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["role"], name: "index_users_on_role"

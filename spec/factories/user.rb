@@ -6,6 +6,7 @@ FactoryBot.define do
     name
     surname { 'Surname' }
     password { 'test-password' }
+    timezone { 'America/Mexico_City' }
 
     transient do
       num_attendances { 0 }

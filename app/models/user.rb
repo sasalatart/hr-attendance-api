@@ -14,6 +14,7 @@
 #  name            :string           not null
 #  surname         :string           not null
 #  second_surname  :string
+#  timezone        :string           not null
 #
 
 EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i.freeze
@@ -39,12 +40,15 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :surname, presence: true
 
+  validates :timezone, presence: true,
+                       inclusion: { in: ActiveSupport::TimeZone.all.map { |tz| tz.tzinfo.name } }
+
   validate :organization_present_for_non_admins_only
 
   def check_in!
     assert_employee!
 
-    attendances.create!(entered_at: DateTime.now)
+    attendances.create!(entered_at: DateTime.now, timezone: timezone)
   end
 
   def check_out!

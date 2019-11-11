@@ -35,10 +35,10 @@ class AttendancesController < ApplicationController
   private
 
   def attendance_params
-    params.permit(:id, :employee_id, :entered_at, :left_at)
+    params.permit(:id, :employee_id, :entered_at, :left_at, :timezone)
   end
 
   def update_params
-    params.permit(:id, :entered_at, :left_at)
+    params.permit(:id, :entered_at, :left_at, :timezone)
   end
 end
