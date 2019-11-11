@@ -46,7 +46,7 @@ RSpec.describe Attendance, type: :model do
       it { should_not validate_presence_of(:left_at) }
 
       it 'must be after entered_at' do
-        bod = DateTime.now.beginning_of_day
+        bod = DateTime.now.beginning_of_day - 1.day
         subject.entered_at = bod
         subject.left_at = bod - 1.hour
         expect(subject).to_not be_valid
