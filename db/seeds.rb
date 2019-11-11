@@ -21,7 +21,7 @@ def add_attendances_to(employee)
 
     next if bod.saturday? || bod.sunday?
 
-    entered_at = bod + 9.hours + (rand * 30).minutes
+    entered_at = bod + 15.hours + (rand * 30).minutes
     left_at = entered_at + 9.hours + (rand * 30).minutes
     employee.attendances.create!(
       entered_at: entered_at,
