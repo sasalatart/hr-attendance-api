@@ -54,7 +54,7 @@ class User < ApplicationRecord
   def check_out!
     assert_employee!
 
-    last_attendance = attendances.order(left_at: :asc).last
+    last_attendance = attendances.order(entered_at: :asc).last
 
     raise Exceptions::UserDidNotCheckIn unless last_attendance
     raise Exceptions::UserAlreadyCheckedOut unless last_attendance.left_at.nil?
