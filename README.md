@@ -1,4 +1,4 @@
-# HR Attendances API
+# HR Attendance API
 
 [![CircleCI](https://circleci.com/gh/sasalatart/hr-attendance-api.svg?style=svg&circle-token=480eba02084e289a583b796246008b97e305c676)](https://circleci.com/gh/sasalatart/hr-attendance-api)
 
@@ -45,11 +45,21 @@ A React client may be found [in this repo](https://github.com/sasalatart/hr-atte
 ## Development Setup
 
 1. Clone and cd into this repository.
-2. Make sure to have [Ruby](https://rvm.io/) and [PostgreSQL](https://www.postgresql.org/) available
-   on your machine.
+2. Make sure you have [Ruby](https://rvm.io/) and [PostgreSQL](https://www.postgresql.org/)
+   available on your machine.
 3. Make sure you have access to the application's credentials, as explained in the next section.
 4. Run `bundle install` to install ruby dependencies.
 5. Setup the database by running `rails db:reset`.
+
+   - 5 organizations will be created.
+   - An admin will be created with the email `admin@example.org`.
+   - 25 org admins will be created with the email `org-admin-n@example.org`, where n is a number
+     between 1 and 25.
+   - 175 employees will be created with the email `employee-n@example.org`, where n is a number
+     between 1 and 175.
+   - All of the users created via seeds will have the same password (which is **password**), unless
+     specified via `DEFAULT_PASSWORD` env variable.
+
 6. Run `rails s` to run the application on port 3000.
 
 ## Credentials Setup
