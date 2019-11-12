@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-DEFAULT_PASSWORD = 'napoleon'
 DEFAULT_TIMEZONE = 'America/Mexico_City'
 total_organizations = 5
 org_admins_per_organization = 5
@@ -10,7 +9,7 @@ def common_user_params
   {
     name: Faker::Name.first_name,
     surname: Faker::Name.last_name,
-    password: DEFAULT_PASSWORD,
+    password: ENV['DEFAULT_PASSWORD'] || 'password',
     timezone: DEFAULT_TIMEZONE
   }
 end
