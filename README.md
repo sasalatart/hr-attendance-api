@@ -14,16 +14,24 @@ A React client may be found [in this repo](https://github.com/sasalatart/hr-atte
 
 ## Assumptions
 
-- All users (except admins) belong to an organization, as the app was designed to work with multiple organizations/companies.
+- All users (except admins) belong to an organization, as the app was designed to work with multiple
+  organizations/companies.
 - There are three roles: `admins`, `org_admins`, and `employees`:
 
-  - `admins`: May manage organizations, and manage org admins and employees within them.
+  - `admins`: May manage organizations, and manage org admins and employees within them. They are
+    the "seed users" of the platform.
   - `org_admins`: May create more org admins and employees for their organizations (and manage them),
     as well as read and manage employee attendances. These users do not check in nor check out (they
     do not have their own attendances).
   - `employees`: These may check in & check out their attendances, as well as see their own past
     attendances.
 
+- **There is no signup**. All users must be created by either an `org admin` (if the user will
+  exist within the same organization), or by a platform `admin`. The application always assumes
+  there is at least one `admin` who is able to start adding users to the app, who will in turn keep
+  on adding others. This is done so as to prevent external people from creating an account within an
+  organization they do not belong to.
+- Authentication is done via short-lived JWTs (with a lifespan of 2 hours).
 - Users have a timezone assigned to them, which may be updated. These timezones are also stored in
   each of their attendances as they are registered (checkin & checkout). This way attendances
   fetched have enough context to be read according to where each employee is geographically located,
@@ -31,7 +39,6 @@ A React client may be found [in this repo](https://github.com/sasalatart/hr-atte
   information is. This allows for multinational/remote organizations to use the application, where
   they span over different timezones, and read checkin & checkout times relative to where they were
   actually done.
-- Authentication is done via short-lived JWTs (with a lifespan of 2 hours).
 
 ## Technologies and Services Used
 
