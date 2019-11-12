@@ -8,9 +8,11 @@ RSpec.describe 'Attendances requests' do
     it_behaves_like 'a request that needs authentication'
 
     context 'when the user is authenticated' do
-      context 'when the user is an org admin' do
-        let(:requester) { create(:org_admin) }
-        it_behaves_like 'a forbidden request'
+      %i[admin org_admin].each do |role|
+        context "when the user is an #{role}" do
+          let(:requester) { create(role) }
+          it_behaves_like 'a forbidden request'
+        end
       end
 
       context 'when the user is an employee' do
@@ -49,9 +51,11 @@ RSpec.describe 'Attendances requests' do
     it_behaves_like 'a request that needs authentication'
 
     context 'when the user is authenticated' do
-      context 'when the user is an org admin' do
-        let(:requester) { create(:org_admin) }
-        it_behaves_like 'a forbidden request'
+      %i[admin org_admin].each do |role|
+        context "when the user is an #{role}" do
+          let(:requester) { create(role) }
+          it_behaves_like 'a forbidden request'
+        end
       end
 
       context 'when the user is an employee' do
