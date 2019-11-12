@@ -11,6 +11,7 @@ class Ability
 
     if user.admin?
       can :manage, :all
+      cannot %i[check_in check_out], Attendance
       return
     end
 
